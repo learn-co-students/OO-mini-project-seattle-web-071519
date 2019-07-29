@@ -57,11 +57,16 @@ class User
     #bonus
     def safe_recipes
         #go through user's recipes and get rid of any recipes 
-        #that contain any allergens
-        self.recipes.reject do |recipe|
-            recipe.ingredients.any? do |ingredient|
-                allergens.include?(ingredient)
-            end
+        #that contain any allergens - user helper method
+        recipes.select do |recipe|
+            self.is_safe?(recipe)
+        end
+    end
+
+    #helper method to find out if a given recipe instance is safe to eat
+    def is_safe?(recipe)
+        !recipe.ingredients.any? do |ingredient|
+            allergens.include?(ingredient)
         end
     end
 end
